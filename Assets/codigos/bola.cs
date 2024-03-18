@@ -2,20 +2,51 @@ using UnityEngine;
 
 public class MovimientoPersonaje : MonoBehaviour
 {
-    public float velocidad = 5f; // Velocidad de movimiento del personaje
+
+    float speed = 5f;
+    public float rotationSpeed = 5f;
+    public float Jumpv = 5f;
+    private Rigidbody rb;
+    public float thrust = 10;
+    bool m_isGrounded;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        m_isGrounded = true; 
+    }
 
     void Update()
     {
-        // Obtener la entrada del eje horizontal y vertical
+        // Movimiento del personaje
         float movimientoHorizontal = Input.GetAxis("Horizontal");
         float movimientoVertical = Input.GetAxis("Vertical");
 
-        // Calcular la dirección de movimiento basada en la entrada del jugador
-        Vector3 direccionMovimiento = new Vector3(movimientoHorizontal, 0f, movimientoVertical).normalized;
+        Vector3 movementDirection = new Vector3(movimientoHorizontal, 0f, movimientoVertical);
+        movementDirection.Normalize();
 
-        // Mover el personaje en la dirección calculada en relación con su orientación
-        transform.Translate(direccionMovimiento * velocidad * Time.deltaTime, Space.Self);
+        transform.position = transform.position + movementDirection * speed * Time.deltaTime;
+
+        if(movementDirection != Vector3.zero) transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(movementDirection),rotationSpeed * Time.deltaTime);
+
+        //salto//
+        if (Input.GetKeyDown(KeyCode.Space) && m_isGrounded == true)
+        {
+            Jump();
+        }
     }
+
+    public void Jump()
+    {
+        m_isGrounded = false;
+        rb.AddForce(0, thrust, 0, ForceMode.Impulse);
+    }
+    void OnCollisionEnter(Collision other)
+        {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            m_isGrounded = true;
+        }
+        }
 }
 
 
