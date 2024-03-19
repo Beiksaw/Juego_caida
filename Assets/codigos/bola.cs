@@ -9,6 +9,7 @@ public class MovimientoPersonaje : MonoBehaviour
     private Rigidbody rb;
     public float thrust = 10;
     bool m_isGrounded;
+    public static int puntajeTotal = 0;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
