@@ -19,8 +19,8 @@ public class MovimientoPersonaje : MonoBehaviour
     void Update()
     {
         // Movimiento del personaje
-        float movimientoHorizontal = Input.GetAxis("Horizontal");
-        float movimientoVertical = Input.GetAxis("Vertical");
+        float movimientoHorizontal = -Input.GetAxis("Vertical");
+        float movimientoVertical = Input.GetAxis("Horizontal");
 
         Vector3 movementDirection = new Vector3(movimientoHorizontal, 0f, movimientoVertical);
         movementDirection.Normalize();
